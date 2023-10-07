@@ -1,2 +1,2 @@
-local key = "vinhquang"
+local key = "key"
 return key
