@@ -7,39 +7,74 @@ local dis = nil
 drops:Textbox("Distance aura","type",true,function(v)
 dis = v
 end)
-drops:Toggle("Kill Aura For Raid",false,function(t)
+drops:Toggle("Kill Aura [World]",false,function(t)
 getgenv().aura= t
 if dis == nil then
-DiscordLib:Notification("Warning", "Choose Player to Teleport Player", "Ok") 
+DiscordLib:Notification("Warning", "?", "Ok") 
 else
 while aura do wait(.1)
-for i, v in pairs(game:GeService("Workspace"):GetDescendants()) do
-if v:FindFirstChild("Humanoid") and v.Name ~= game.Players.LocalPlayer.Name and v.Humanoid.Health > 0 and (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < math.abs(dis) then
+for i, v in pairs(game:GetService("Workspace").Npc:GetDescendants()) do
+if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < math.random(dis) then
 pcall(function()
-repeat wait(.2)
 v.Humanoid.Health = 0
 v.HumanoidRootPart.CanCollide = false
+v.Humanoid.WalkSpeed = 0
 sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius", math.huge)
-until v.Humanoid.Health <= 0 or auto == false
 end)
 end
 end
 end
 end
 end)
-drops:Toggle("Fast Attack",false,function(v)
+drops:Toggle("Fast Attack [World]",false,function(v)
 getgenv().fastattack = v
 while fastattack do task.wait()
 pcall(function()
 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 if v:IsA("Tool") then
-if game.PlaceId == 13373351184 then
+for _ = 1,5 do
 local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
 }
-v.HackerDepTreai.RemoteEvent:FireServer(unpack(args))
+v.HackerDepTraai.RemoteEvent:FireServer(unpack(args))
+end
+end
+end
+end)
+end
+end)
+local drops = serv:Channel("Raid")
+local dis = nil
+drops:Textbox("Distance aura","type",true,function(v)
+dis = v
+end)
+drops:Toggle("Kill Aura [Raid]",false,function(t)
+getgenv().aura= t
+if dis == nil then
+DiscordLib:Notification("Warning", "?", "Ok") 
 else
+while aura do wait(.1)
+for i, v in pairs(game:GetService("Workspace").SpawnEnemy:GetDescendants()) do
+if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < math.random(dis) then
+pcall(function()
+v.Humanoid.Health = 0
+v.HumanoidRootPart.CanCollide = false
+v.Humanoid.WalkSpeed = 0
+sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius", math.huge)
+end)
+end
+end
+end
+end
+end)
+drops:Toggle("Fast Attack [Raid]",false,function(v)
+getgenv().fastattack = v
+while fastattack do task.wait()
+pcall(function()
+for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+if v:IsA("Tool") then
+for _ = 1,5 do
 local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
@@ -51,6 +86,84 @@ end
 end)
 end
 end)
+drops:Seperator()
+local wp= nil
+local wpli= {}
+for i, c in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if c:IsA("Tool") and c:FindFirstChild("HackerSo1TheGioi") then
+table.insert(wpli,c.Name)
+end
+end
+local rs = drops:Dropdown("Weapon",wpli,function(h)
+wp = h
+end)
+drops:Button("Refresh",function()
+rs:Clear()
+for i, c in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+if c:IsA("Tool") and c:FindFirstChild("HackerSo1TheGioi") then
+rs:Add(c.Name)
+end
+end
+end)
+drops:Toggle("Auto [Raid]",false,function(c)
+local plr= game.Players.LocalPlayer.Character
+if wp == nil then
+DiscordLib:Notification("Warning","Choose Weapon","Ok")
+else
+getgenv().raid = c
+while raid do task.wait()
+pcall(function()
+for i, v in pairs(game.Workspace.SpawnEnemy:GetChildren()) do
+if v:IsA("Folder") then
+for i, h in pairs(v:GetChildren()) do
+for i, g in pairs(v:GetChildren()) do
+if h.Humanoid.Health > 0 then
+h.HumanoidRootPart.CFrame = g.HumanoidRootPart.CFrame
+h.Humanoid.WalkSpeed = 0
+plr.HumanoidRootPart.CFrame = h.HumanoidRootPart.CFrame*CFrame.new(0,9,2)
+for i, c in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+if c:IsA("Tool") and c.Name == wp then
+for _ = 1,1 do
+local args = {
+    [1] = 1,
+    [2] = game:GetService("Players").LocalPlayer
+}
+c.HackerSo1TheGioi.RemoteEvent:FireServer(unpack(args))
+end
+end
+end
+end
+end
+end
+end
+end
+end)
+end
+end
+end)
+spawn(function()
+while wait() do
+if getgenv().raid then
+game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack: FindFirstChild(wp))
+end
+end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         local sldrs = serv:Channel("Walk Speed")   
 local spd = nil
     local sldr = sldrs:Slider("Speeds", 0, 1000, 0, function(v)    
