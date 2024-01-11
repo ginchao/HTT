@@ -37,7 +37,7 @@ local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
 }
-v.HackerDepTraai.RemoteEvent:FireServer(unpack(args))
+v.HackerSo1TheGioi.RemoteEvent:FireServer(unpack(args))
 end
 end
 end
@@ -85,6 +85,9 @@ end
 end
 end)
 end
+end)
+drops:Button("Teleport To Raid",function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["5 Player"].Gate.Fade.WorldPivot
 end)
 drops:Seperator()
 local wp= nil
