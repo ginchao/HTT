@@ -1,4 +1,18 @@
-
+local plraid = game.Players.LocalPlayer
+getgenv().a = false
+function Teleport(pos) 
+	if not plraid.Character then 
+		return
+	end
+	if not plraid.Character:FindFirstChild("HumanoidRootPart") then return end
+	plraid.Character.HumanoidRootPart.CFrame = pos
+end
+function QuayNgang(pos,quaylen) 
+	if quaylen then 
+	    return CFrame.new(pos.Position)*CFrame.Angles(math.rad(90),0,0)
+	end
+    return CFrame.new(pos.Position)*CFrame.Angles(math.rad(-90),0,0)
+end
 local DiscordLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/ginchao/Discord-Lib/main/Discord-Lib'))()  
 local win = DiscordLib:Window("TestHub")
 local serv = win:Server("DragonSea", "")
@@ -123,10 +137,10 @@ for i, g in pairs(v:GetChildren()) do
 if h.Humanoid.Health > 0 then
 h.HumanoidRootPart.CFrame = g.HumanoidRootPart.CFrame
 h.Humanoid.WalkSpeed = 0
-plr.HumanoidRootPart.CFrame = h.HumanoidRootPart.CFrame*CFrame.new(0,9,2)
+plr.HumanoidRootPart.CFrame = Teleport(QuayNgang(h.HumanoidRootPart.CFrame+Vector3.new(0,9,0)))
 for i, c in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 if c:IsA("Tool") and c.Name == wp then
-for _ = 1,1 do
+for _ = 1,2 do
 local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
@@ -148,6 +162,7 @@ spawn(function()
 while wait() do
 if getgenv().raid then
 game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack: FindFirstChild(wp))
+else break;
 end
 end
 end)
