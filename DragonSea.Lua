@@ -122,7 +122,7 @@ end
 end
 end)
 drops:Toggle("Auto [Raid]",false,function(c)
-local plr= game:GetService("Players").LocalPlayer
+local plr= game.Players.LocalPlayer.Character
 if wp == nil then
 DiscordLib:Notification("Warning","Choose Weapon","Ok")
 else
@@ -136,13 +136,13 @@ for i, g in pairs(v:GetChildren()) do
 if h.Humanoid.Health > 0 then
 h.HumanoidRootPart.CFrame = g.HumanoidRootPart.CFrame
 h.Humanoid.WalkSpeed = 0
-plr.HumanoidRootPart.CFrame = Teleport(QuayNgang(h.HumanoidRootPart.CFrame+Vector3.new(0,9,0)))
-for i, c in pairs(plr.Character:GetChildren()) do
+Teleport(QuayNgang(h.HumanoidRootPart.CFrame+Vector3.new(0,9,0)))
+for i, c in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 if c:IsA("Tool") and c.Name == wp then
-for _ = 1,2 do
+for _ = 1,3 do
 local args = {
     [1] = 1,
-    [2] = plr
+    [2] = game:GetService("Players").LocalPlayer
 }
 c.HackerSo1TheGioi.RemoteEvent:FireServer(unpack(args))
 end
