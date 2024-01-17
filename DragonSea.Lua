@@ -93,6 +93,20 @@ game.StarterGui:SetCore("SendNotification", {
                  Duration = 2 })
 end
 end)
+drops:Toggle("Grabtools | Nhặt Item Người Chơi Vứt",false, function(I) 
+ getgenv().autograb = I 
+ spawn(function() 
+ while autograb==true do wait() 
+ if not getgenv().autograb then break end 
+ local humanoid = game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")         
+ for _, child in ipairs(workspace:GetChildren()) do 
+ if game.Players.LocalPlayer.Character and child:IsA("BackpackItem") and child:FindFirstChild("Handle") then 
+ humanoid:EquipTool(child) 
+ end 
+ end 
+ end 
+ end) 
+ end) 
 local drops = serv:Channel("Raid")
 local dis = nil
 drops:Textbox("Distance aura","type",true,function(v)
