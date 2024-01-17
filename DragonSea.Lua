@@ -17,13 +17,13 @@ local win = DiscordLib:Window("TestHub")
 local serv = win:Server("DragonSea", "")
 local drops = serv:Channel("Main")
 local dis = nil
-drops:Textbox("Distance aura","type",true,function(v)
+drops:Textbox("Khoảng Cách Aura","type",true,function(v)
 dis = v
 end)
 drops:Toggle("Kill Aura [World]",false,function(t)
 getgenv().aura= t
 if dis == nil then
-DiscordLib:Notification("Warning", "?", "Ok") 
+DiscordLib:Notification("Warning", "Ghi Số Khoảng Cách Aura Trước Khi Dùng", "Ok") 
 else
 while aura do wait(.1)
 for i, v in pairs(game:GetService("Workspace").Npc:GetDescendants()) do
@@ -39,7 +39,7 @@ end
 end
 end
 end)
-drops:Toggle("Fast Attack [World]",false,function(v)
+drops:Toggle("Fast Attack",false,function(v)
 getgenv().fastattack = v
 while fastattack do task.wait()
 pcall(function()
@@ -55,6 +55,42 @@ end
 end
 end
 end)
+end
+end)
+drops:Button("Check Item Spawn",function()
+local nut =  Instance.new("BindableFunction")
+function item(it)
+for i, v in pairs(game.Workspace.SpawnItemTime: GetDescendants()) do  
+if v:IsA("Tool") and v:FindFirstChild("Handle") then
+it = v
+end
+end
+return it
+end
+function nut.OnInvoke(f)
+if f == "Ok" and item() then
+firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,item().Name,1) wait()
+firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,item().Name,0)
+else
+print("emo")
+end
+end
+if item() then
+game.StarterGui:SetCore("SendNotification", { 
+                 Title = "TestHub", 
+                 Text = "Hiện Tại Server Có | "..item().Name, 
+                 Icon = "", 
+                 Duration = 5,
+        Callback = nut,
+Button1 = "Ok",
+Button2 = "No"
+             })
+else
+game.StarterGui:SetCore("SendNotification", { 
+                 Title = "TestHub", 
+                 Text = "Hiện Tại Server Không Có Item Spawn", 
+                 Icon = "", 
+                 Duration = 2 })
 end
 end)
 local drops = serv:Channel("Raid")
