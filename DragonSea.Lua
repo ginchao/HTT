@@ -1,5 +1,4 @@
 local plraid = game.Players.LocalPlayer
-getgenv().a = false
 function Teleport(pos) 
 	if not plraid.Character then 
 		return
@@ -161,8 +160,7 @@ end)
 spawn(function()
 while wait() do
 if getgenv().raid then
-game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack: FindFirstChild(wp))
-else break;
+game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack:FindFirstChild(wp))
 end
 end
 end)
