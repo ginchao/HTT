@@ -82,9 +82,9 @@ end
 if item() then
 game.StarterGui:SetCore("SendNotification", { 
                  Title = "TestHub", 
-                 Text = "Hiện Tại Server Có | "..item().Name, 
+                 Text = "Hiện Tại Server Có | "..item().Name.." | Nhặt Không?", 
                  Icon = "", 
-                 Duration = 5,
+                 Duration = 10,
         Callback = nut,
 Button1 = "Ok",
 Button2 = "No"
