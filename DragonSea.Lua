@@ -193,7 +193,7 @@ h.Humanoid.WalkSpeed = 0
 Teleport(QuayNgang(h.HumanoidRootPart.CFrame+Vector3.new(0,9,0)))
 for i, c in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 if c:IsA("Tool") and c.Name == wp then
-for _ = 1,3 do
+for _ = 1,1 do
 local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
