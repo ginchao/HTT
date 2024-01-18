@@ -77,6 +77,8 @@ else
 print("emo")
 end
 end
+end
+end
 if item() then
 game.StarterGui:SetCore("SendNotification", { 
                  Title = "TestHub", 
