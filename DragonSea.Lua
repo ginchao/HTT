@@ -69,8 +69,10 @@ return it
 end
 function nut.OnInvoke(f)
 if f == "Ok" and item() then
-firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,item().Name,1) wait()
-firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,item().Name,0)
+for i, v in pairs(game.Workspace.SpawnItemTime: GetDescendants()) do  
+if v:IsA("Tool") and v:FindFirstChild("Handle") then
+firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,v.Handle,1) wait()
+firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart,v.Handle,0)
 else
 print("emo")
 end
