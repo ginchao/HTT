@@ -46,16 +46,46 @@ pcall(function()
 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 if v:IsA("Tool") then
 for _ = 1,5 do
+if v:FindFirstChild("HackerSo1TheGioi")
 local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
 }
 v.HackerSo1TheGioi.RemoteEvent:FireServer(unpack(args))
+else
+local args = {
+    [1] = 1,
+    [2] = game:GetService("Players").LocalPlayer
+}
+v.Attack.RemoteEvent:FireServer(unpack(args))
+end
 end
 end
 end
 end)
 end
+end)
+drops:Toggle("Bật Không Delay Đấm Thường",false,(function(h)
+local UserInputService = game:GetService("UserInputService")
+local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+getgenv().auto = true
+local tapCount = 0 -- biến để đếm số lần nhấn
+
+UserInputService.TouchTapInWorld:Connect(function(position, processedByUI)
+if getgenv().auto then
+    local touchPosition = position
+    tapCount = tapCount + 1 -- tăng biến đếm mỗi lần nhấn
+for i, v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren()) do
+if v:IsA("Tool") then
+if v:FindFirstChild("HackerSo1TheGioi") then
+    v.HackerSo1TheGioi.RemoteEvent:FireServer(1, game.Players.LocalPlayer, tapCount)
+else
+v.Attack.RemoteEvent:FireServer(1, game.Players.LocalPlayer, tapCount)
+end
+end
+end
+end
+end)
 end)
 drops:Button("Check Item Spawn",function()
 local nut =  Instance.new("BindableFunction")
@@ -135,24 +165,6 @@ end
 end
 end
 end)
-drops:Toggle("Fast Attack [Raid]",false,function(v)
-getgenv().fastattack = v
-while fastattack do task.wait()
-pcall(function()
-for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-if v:IsA("Tool") then
-for _ = 1,5 do
-local args = {
-    [1] = 1,
-    [2] = game:GetService("Players").LocalPlayer
-}
-v.HackerSo1TheGioi.RemoteEvent:FireServer(unpack(args))
-end
-end
-end
-end)
-end
-end)
 drops:Button("Teleport To Raid",function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["5 Player"].Gate.Fade.WorldPivot
 end)
@@ -181,7 +193,7 @@ if wp == nil then
 DiscordLib:Notification("Warning","Choose Weapon","Ok")
 else
 getgenv().raid = c
-while raid do task.wait()
+while raid do wait()
 pcall(function()
 for i, v in pairs(game.Workspace.SpawnEnemy:GetChildren()) do
 if v:IsA("Folder") then
