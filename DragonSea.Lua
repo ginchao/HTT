@@ -46,7 +46,7 @@ pcall(function()
 for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
 if v:IsA("Tool") then
 for _ = 1,5 do
-if v:FindFirstChild("HackerSo1TheGioi")
+if v:FindFirstChild("HackerSo1TheGioi") then
 local args = {
     [1] = 1,
     [2] = game:GetService("Players").LocalPlayer
