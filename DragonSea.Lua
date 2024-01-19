@@ -68,13 +68,13 @@ end)
 drops:Toggle("Bật Không Delay Đấm Thường",false,(function(h)
 local UserInputService = game:GetService("UserInputService")
 local mouse = game:GetService("Players").LocalPlayer:GetMouse()
-getgenv().auto = true
-local tapCount = 0 -- biến để đếm số lần nhấn
+getgenv().cd = h
+local tapCount = 0 
 
 UserInputService.TouchTapInWorld:Connect(function(position, processedByUI)
-if getgenv().auto then
+if getgenv().cd then
     local touchPosition = position
-    tapCount = tapCount + 1 -- tăng biến đếm mỗi lần nhấn
+    tapCount = tapCount + 1 
 for i, v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren()) do
 if v:IsA("Tool") then
 if v:FindFirstChild("HackerSo1TheGioi") then
