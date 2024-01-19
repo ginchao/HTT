@@ -65,7 +65,7 @@ end
 end)
 end
 end)
-drops:Toggle("Bật Không Delay Đấm Thường",false,(function(h)
+drops:Toggle("Bật Không Delay Đấm Thường",false,function(h)
 local UserInputService = game:GetService("UserInputService")
 local mouse = game:GetService("Players").LocalPlayer:GetMouse()
 getgenv().cd = h
