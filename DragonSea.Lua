@@ -137,8 +137,7 @@ function KhoangCachTuyetDoi(a,b)
 end
 function GetAllWeapon() 
 	return Add(map(plr.Backpack:GetChildren(),function(a)
-if a.Name:FindFirstChild("HackerSo1TheGioi") then
- return a.Name end end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a.Name or nil) end))
+ return a.Name end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a.Name or nil) end))
 end
 function GetAllWeaponInstance() 
 	return Add(map(plr.Backpack:GetChildren(),function(a) return a end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a or nil) end))
@@ -314,7 +313,7 @@ drops:Toggle("Grabtools | Nhặt Item Người Chơi Vứt",false, function(I)
  end) 
 local drops = serv:Channel("Farm")
 local liwp = GetAllWeapon()
-drops:Dropdown("wp",liwp,function(i)
+drops:Dropdown("Weapon",liwp,function(i)
 getgenv().wp1 = i
 end)
 drops:Toggle("AutoFarm",false,function(v)
