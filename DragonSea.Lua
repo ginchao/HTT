@@ -1,10 +1,10 @@
-local plraid = game.Players.LocalPlayer
+local plr = game:GetService("Players").LocalPlayer
 function Teleport(pos) 
-	if not plraid.Character then 
+	if not plr.Character then 
 		return
 	end
-	if not plraid.Character:FindFirstChild("HumanoidRootPart") then return end
-	plraid.Character.HumanoidRootPart.CFrame = pos
+	if not plr.Character:FindFirstChild("HumanoidRootPart") then return end
+	plr.Character.HumanoidRootPart.CFrame = pos
 end
 function QuayNgang(pos,quaylen) 
 	if quaylen then 
@@ -12,6 +12,175 @@ function QuayNgang(pos,quaylen)
 	end
     return CFrame.new(pos.Position)*CFrame.Angles(math.rad(-90),0,0)
 end
+function GetQuestLevel(quest) 
+	local ret = (string.gsub(quest, "%D", ""))
+	return tonumber(ret)
+end
+function map(list,func)
+	local ret = {}
+	for k,v in pairs(list) do 
+		ret[k] = func(v)
+	end
+	return ret
+end
+function Add(a,b) 
+	local rel = {}
+	for k,v in pairs(a) do table.insert(rel,v) end
+	for k,v in pairs(b) do table.insert(rel,v) end
+	return rel
+end
+local FarmList = {}
+local FarmListIndex = {}
+local IndexLevel = {}
+
+if game.Workspace:FindFirstChild("QuestFolder") then 
+	for k,v in pairs(game:GetService("Workspace").QuestFolder:GetChildren()) do 
+		local lv = GetQuestLevel(v.Name)
+		FarmList[lv] = {
+			Mob = lv,
+			Quest = v,
+			Level = lv
+		}
+	end
+	local function Com(a, b)
+		return a < b
+	end
+	for k in pairs(FarmList) do
+		table.insert(FarmListIndex, k)
+	end
+	table.sort(FarmListIndex, Com)
+	
+	for _, k in ipairs(FarmListIndex) do
+		table.insert(IndexLevel,k)
+	end
+end
+
+
+function HasQuest(currquest) 
+	if not plr:FindFirstChild("Quest") then return false end
+	if not currquest then 
+		return plr.Quest.Num.Value ~= 0
+	end
+	return plr.Quest.Num.Value == table.find(IndexLevel,currquest)
+end
+function CheckLevel() 
+    local level = plr.Data.Levels.Value
+    local index = math.huge
+    local questchecker
+    for _, i in ipairs(FarmListIndex) do
+		local v = FarmList[k]
+        if (level - i) >= 0 then
+            if (level - i) < math.abs(level - index) then
+                index = i
+            end
+        end
+    end   
+    return FarmList[index]
+end
+function CheckMob(mob,nocheckhelth) 
+	if not mob.Parent then return false end
+	if not mob:FindFirstChild("HumanoidRootPart") then return false end
+	if not mob:FindFirstChild("Humanoid") then return false end
+	if not mob:FindFirstChild("Head") then return false end
+	if not nocheckhelth then 
+		if mob.Humanoid.Health == 0 then return false end
+	end
+	return true
+end
+function ClickButton(v)
+	v.BackgroundTransparency = 1
+	v.Size = UDim2.new(100, 100, 100, 100)
+	v.Position = UDim2.new(-1, 0, -5, 0)
+	wait(.2)
+	game:GetService("VirtualUser"):ClickButton1(Vector2.new(50, 50))
+end
+function CheckWeapon(weapon) 
+	for k,v in pairs(plr.Character:GetChildren()) do 
+		if v.Name == weapon and v:IsA("Tool") then return v end
+	end
+end
+function EquipWeapon(weapon) 
+	if plr.Character:FindFirstChild("Humanoid") and plr.Backpack:FindFirstChild(weapon) then
+    	plr.Character.Humanoid:EquipTool(plr.Backpack[weapon])
+    end
+end
+function IsSkillOnCooldown(Weapon,Skill) 
+	local CooldownUi 
+	for k,v in pairs(plr.PlayerGui:GetChildren()) do 
+		if Weapon == "Sword" then 
+			if string.match(v.Name,"SW") then 
+				CooldownUi = v
+				break;
+			end
+		elseif Weapon == "DF" then
+			if string.match(v.Name,"DF") then 
+				CooldownUi = v
+				break;
+			end
+		end
+	end
+	if not CooldownUi then return end
+	if not CooldownUi:FindFirstChild(Skill) then return end
+
+	local cooldown = CooldownUi[Skill]
+	if cooldown.Visible == false then return false end
+	if cooldown.Size.X.Scale == 0 then return false end
+	return true
+end
+function CheckMobLevel(mob,level) 
+	if GetQuestLevel(mob.Name) == level then return true end
+end
+function KhoangCachTuyetDoi(a,b) 
+	a = Vector3.new(a.X,0,a.Z)
+	b = Vector3.new(b.X,0,b.Z)
+	return (a-b).magnitude
+end
+function GetAllWeapon() 
+	return Add(map(plr.Backpack:GetChildren(),function(a) return a.Name end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a.Name or nil) end))
+end
+function GetAllWeaponInstance() 
+	return Add(map(plr.Backpack:GetChildren(),function(a) return a end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a or nil) end))
+end
+function GetWeaponType(wp) 
+	for k,v in pairs(wp:GetChildren()) do 
+		if string.match(v.Name:lower(),"sword") then return "Sword"	 end
+	end
+	if wp:FindFirstChild("Melee") then return "Melee" end
+	if wp:FindFirstChild("skill") and not wp:FindFirstChild("HackerSo1TheGioi") then return "DF" end
+end
+
+local SaveFileName = plr.Name.."_Dragon Sea.json"
+local Settings = {}
+function SaveSettings()
+    local HttpService = game:GetService("HttpService")
+    if not isfolder("CFA HUB") then
+        makefolder("CFA HUB")
+    end
+    writefile("CFA HUB/" .. SaveFileName, HttpService:JSONEncode(Settings))
+end
+
+function ReadSetting() 
+    local s,e = pcall(function() 
+        local HttpService = game:GetService("HttpService")
+        if not isfolder("CFA HUB") then
+            makefolder("CFA HUB")
+        end
+        return HttpService:JSONDecode(readfile("CFA HUB/" .. SaveFileName))
+    end)
+	print(s,e)
+    if s then return e 
+    else
+        SaveSettings()
+        return ReadSetting()
+    end
+end
+
+Settings = ReadSetting()
+spawn(function() 
+	while wait(2) do SaveSettings() end
+end)
+
+
 local DiscordLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/ginchao/Discord-Lib/main/Discord-Lib'))()  
 local win = DiscordLib:Window("TestHub")
 local serv = win:Server("DragonSea", "")
@@ -141,6 +310,115 @@ drops:Toggle("Grabtools | Nhặt Item Người Chơi Vứt",false, function(I)
  end 
  end) 
  end) 
+local drops = serv:Channel("Farm")
+local liwp = GetAllWeapon()
+drops:Dropdown("wp",liwp,function(i)
+getgenv().wp1 = i
+end)
+drops:Toggle("AutoFarm",false,function(v)
+getgenv().af = v
+-- Auto Stats
+spawn(function() 
+	while wait(1) do 
+		local count = 0
+		while plr.Data.Points.Value > 0 and count < 100 and wait() do 
+			for k,v in pairs(TFListStats) do 
+				if v then 
+					game:GetService("ReplicatedStorage").StatSystem.Points:FireServer(k)
+				end
+			end
+			count = count +1
+		end
+	end
+end)
+end)
+drops:Toggle("BringMob",false,function(v)
+getgenv().br = v
+end)
+-- Auto Farm
+spawn(function() 
+	while task.wait() do 
+		if getgenv().af then 
+sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius", math.huge)
+if getgenv().wp1 == nil then
+             game.StarterGui:SetCore("SendNotification", {
+                 Title = "TestHub",
+                 Text = "Vui Lòng Chọn Vũ Khí", 
+                 Icon = "", 
+                 Duration = 0.1 
+             }) 
+else
+			local CurrentFarmData = CheckLevel()
+			getgenv().Noclip = true
+
+			Teleport(CFrame.new(CurrentFarmData.Quest.ClickPart.Position))
+			if not HasQuest(CurrentFarmData.Level) then
+				if HasQuest() then 
+					for k,v in pairs(plr.PlayerGui:GetChildren()) do 
+						if v.Name == "QuestBar" then 
+							if v:FindFirstChild("Background") and v.Background:FindFirstChild("Cancle") then 
+								ClickButton(v.Background.Cancle)
+								wait(1)
+							end
+						end
+					end
+				else 
+					if not plr.PlayerGui:FindFirstChild("QuestTake") then 
+						fireclickdetector(CurrentFarmData.Quest.ClickPart.ClickDetector,1)
+						wait(1)
+					end
+					if plr.PlayerGui:FindFirstChild("QuestTake") then 
+						ClickButton(plr.PlayerGui.QuestTake.Accept)
+						wait(1)
+					end
+				end
+			else
+				local hasmob = false
+				for k,v in pairs(game.Workspace.Npc:GetChildren()) do 
+					if CheckMobLevel(v,CurrentFarmData.Level) and CheckMob(v) and getgenv().af then 
+						hasmob = true
+						local pos = v.HumanoidRootPart.CFrame
+						local lastbring = tick()
+						repeat wait() 
+							if CheckMob(v) then 
+								if getgenv().br then 
+									if not NoBringMob then 
+										
+										for k,v2 in pairs(game.Workspace.Npc:GetChildren()) do 
+											if CheckMobLevel(v2,CurrentFarmData.Level) and CheckMob(v2) then 
+												
+													v2.HumanoidRootPart.CFrame = pos
+												end
+											end
+										
+									end
+								end
+								Teleport(QuayNgang(v.HumanoidRootPart.CFrame+Vector3.new(0,9,0)))
+								if not CheckWeapon(getgenv().wp1) then 
+									EquipWeapon(getgenv().wp1)
+								else
+									local wp = CheckWeapon(getgenv().wp1)
+									if wp then 
+										if wp:FindFirstChild("HackerSo1TheGioi") and wp.HackerSo1TheGioi:FindFirstChild("RemoteEvent") then 
+											wp.HackerSo1TheGioi.RemoteEvent:FireServer(math.random(1,2),plr)
+										end
+									end
+								end
+							end
+						until not CheckMob(v) or getgenv().af
+					end
+				end
+				if not hasmob then 
+					Teleport(CFrame.new(CurrentFarmData.Quest.ClickPart.Position))
+				end
+			end
+			getgenv().Noclip = true
+		end
+	end
+end
+end)
+
+
 local drops = serv:Channel("Raid")
 local dis = nil
 drops:Textbox("Distance aura","type",true,function(v)
