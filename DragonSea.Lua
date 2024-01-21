@@ -311,7 +311,7 @@ drops:Toggle("Grabtools | Nhặt Item Người Chơi Vứt",false, function(I)
  end 
  end) 
  end) 
-local drops = serv:Channel("Farm")
+local drops = serv:Channel("Farm | Skid = Lỗi Tối Về Fix")
 local liwp = GetAllWeapon()
 drops:Dropdown("Weapon",liwp,function(i)
 getgenv().wp1 = i
@@ -348,7 +348,6 @@ end)
 spawn(function() 
 	while task.wait() do 
 		if getgenv().af then 
-sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius", math.huge)
 if getgenv().wp1 == nil then
              game.StarterGui:SetCore("SendNotification", {
                  Title = "TestHub",
