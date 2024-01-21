@@ -317,6 +317,18 @@ getgenv().wp1 = i
 end)
 drops:Toggle("AutoFarm",false,function(v)
 getgenv().af = v
+end)
+drops:Toggle("BringMob",false,function(v)
+getgenv().br = v
+end)
+drops:Toggle("Auto Stats",false,function(state)
+local ListStats = {"Melee","MaxHealth","Sword","DevilFruit"}
+local TFListStats = {}
+for k,v in pairs(ListStats) do TFListStats[v] = false end
+for k,v in pairs(ListStats) do 
+		TFListStats[v] = state
+end
+end)
 -- Auto Stats
 spawn(function() 
 	while wait(1) do 
@@ -330,10 +342,6 @@ spawn(function()
 			count = count +1
 		end
 	end
-end)
-end)
-drops:Toggle("BringMob",false,function(v)
-getgenv().br = v
 end)
 -- Auto Farm
 spawn(function() 
