@@ -150,36 +150,7 @@ function GetWeaponType(wp)
 	if wp:FindFirstChild("skill") and not wp:FindFirstChild("HackerSo1TheGioi") then return "DF" end
 end
 
-local SaveFileName = plr.Name.."_Dragon Sea.json"
-local Settings = {}
-function SaveSettings()
-    local HttpService = game:GetService("HttpService")
-    if not isfolder("CFA HUB") then
-        makefolder("CFA HUB")
-    end
-    writefile("CFA HUB/" .. SaveFileName, HttpService:JSONEncode(Settings))
-end
 
-function ReadSetting() 
-    local s,e = pcall(function() 
-        local HttpService = game:GetService("HttpService")
-        if not isfolder("CFA HUB") then
-            makefolder("CFA HUB")
-        end
-        return HttpService:JSONDecode(readfile("CFA HUB/" .. SaveFileName))
-    end)
-	print(s,e)
-    if s then return e 
-    else
-        SaveSettings()
-        return ReadSetting()
-    end
-end
-
-Settings = ReadSetting()
-spawn(function() 
-	while wait(2) do SaveSettings() end
-end)
 
 
 local DiscordLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/ginchao/Discord-Lib/main/Discord-Lib'))()  
@@ -322,31 +293,10 @@ end)
 drops:Toggle("BringMob",false,function(v)
 getgenv().br = v
 end)
-drops:Toggle("Auto Stats",false,function(state)
-local ListStats = {"Melee","MaxHealth","Sword","DevilFruit"}
-local TFListStats = {}
-for k,v in pairs(ListStats) do TFListStats[v] = false end
-for k,v in pairs(ListStats) do 
-		TFListStats[v] = state
-end
-end)
--- Auto Stats
-spawn(function() 
-	while wait(1) do 
-		local count = 0
-		while plr.Data.Points.Value > 0 and count < 100 and wait() do 
-			for k,v in pairs(TFListStats) do 
-				if v then 
-					game:GetService("ReplicatedStorage").StatSystem.Points:FireServer(k)
-				end
-			end
-			count = count +1
-		end
-	end
-end)
+
 -- Auto Farm
 spawn(function() 
-	while task.wait() do 
+	while wait() do 
 		if getgenv().af then 
 if getgenv().wp1 == nil then
              game.StarterGui:SetCore("SendNotification", {
