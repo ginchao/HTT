@@ -136,7 +136,9 @@ function KhoangCachTuyetDoi(a,b)
 	return (a-b).magnitude
 end
 function GetAllWeapon() 
-	return Add(map(plr.Backpack:GetChildren(),function(a) return a.Name end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a.Name or nil) end))
+	return Add(map(plr.Backpack:GetChildren(),function(a)
+if a.Name:FindFirstChild("HackerSo1TheGioi") then
+ return a.Name end end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a.Name or nil) end))
 end
 function GetAllWeaponInstance() 
 	return Add(map(plr.Backpack:GetChildren(),function(a) return a end),map(plr.Character:GetChildren(),function(a) return (a:IsA("Tool") and a or nil) end))
