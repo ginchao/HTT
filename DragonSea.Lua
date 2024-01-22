@@ -309,7 +309,7 @@ else
 			local CurrentFarmData = CheckLevel()
 			getgenv().Noclip = true
 
-			Teleport(CFrame.new(CurrentFarmData.Quest.ClickPart.Position))
+			
 			if not HasQuest(CurrentFarmData.Level) then
 				if HasQuest() then 
 					for k,v in pairs(plr.PlayerGui:GetChildren()) do 
