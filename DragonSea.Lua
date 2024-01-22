@@ -282,15 +282,15 @@ drops:Toggle("Grabtools | Nhặt Item Người Chơi Vứt",false, function(I)
  end 
  end) 
  end) 
-local drops = serv:Channel("Farm | Skid = Lỗi Tối Về Fix")
+local drops = serv:Channel("Farm | Skid")
 local liwp = GetAllWeapon()
 drops:Dropdown("Weapon",liwp,function(i)
 getgenv().wp1 = i
 end)
-drops:Toggle("AutoFarm",false,function(v)
+drops:Toggle("Auto Farm Level",false,function(v)
 getgenv().af = v
 end)
-drops:Toggle("BringMob",false,function(v)
+drops:Toggle("Bring Mob",false,function(v)
 getgenv().br = v
 end)
 
